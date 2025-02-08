@@ -17,7 +17,7 @@ class Application():
         self.word2DArray = Array2D(10,10)
         self.word2DArray.populate()
         self.b = Array2D(10,10)
-        self.selectedWords = ['november', 'sunday', 'july', 'april', 'aunty', 'doctor', 'teacher', 'turkey', 'pakistan', 'tuesday']
+        self.selectedWords = ['carrot','potato', 'fish']
 
         self.build()
 
@@ -59,7 +59,11 @@ class Application():
         for i in range(x):
             for j in range(y):
                 text = self.word2DArray[i,j]
-                but = Button(self.WordSearchFrame, text=text, height=2, width=5, command=lambda coords = (i, j): self.submitData(coords))
+
+                but = Button(self.WordSearchFrame, text=text, height=2, width=5, 
+             fg="black", font=("Arial", 15, "bold"), 
+             command=lambda coords=(i, j): self.submitData(coords))
+                
                 self.btnList[i-1].append(but)
                 but.grid(row=i,column=j)
         return self.WordSearchFrame
