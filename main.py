@@ -5,14 +5,7 @@ from array2d import Array2D
 class Application():
     def __init__(self):
         self.btnList = [[], [], [], [], [], [], [], [], [], []]
-        self.status = False
-        self.currentWordCoords = []
-        self.currentPos = 0
-        self.count = 0
-        self.j = None
-        self.k = None
-        self.track = False
-        self.color = None
+        
         Array2D.__init__(self,10,10)
         self.word2DArray = Array2D(10,10)
         self.word2DArray.populate()
