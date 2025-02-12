@@ -164,7 +164,7 @@ class Application():
                     width=2, 
                     height=1,
                     font=('Arial', 10),
-                    bg='green',              # This will make it green
+                    bg='white',              # This will make it green
                     fg='black',
                     disabledforeground='black',  # This ensures text stays visible
                     border=0,
@@ -195,12 +195,12 @@ class Application():
         row, col = coords
         button = self.Buttons[row, col]  # Get the button correctly
 
-        #if button:
+        # if button:
         #    self.remaining_lives -= 1
-        #   self.found_count += 1
+        #    self.found_count += 1
         #    self.update_lives_display()
         #    self.udpate_found_words_label()
-        #    button.config(activebackground="green")
+        #    button.config(bg="green")
             
 
     #Endless loop that displays timer       
