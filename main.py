@@ -4,7 +4,9 @@ from array2d import Array2D
 
 class Application():
     def __init__(self):
-        
+      self.startGame()  
+
+    def startGame(self):
         self.word2DArray = Array2D(10, 10)
         self.selectedWords = ['carrot', 'potato', 'fish']
         self.word2DArray.populate(self.selectedWords)
@@ -18,6 +20,10 @@ class Application():
         self.time_left = 600
 
         self.build()
+
+    def restartGame(self):
+        self.root.destroy()
+        self.startGame()
 
     def build(self):
         self.root = Tk()
@@ -98,6 +104,20 @@ class Application():
             command=self.destroyGame
         )
         quit_btn.grid(row=0, column=4, padx=10)
+
+        # Restart button
+        restart_btn = Button(
+            control_panel,
+            text="RESTART",
+            font=('Arial', 12, 'bold'),
+            bg='#4285F4',
+            fg='white',
+            border=0,
+            padx=20,
+            pady=5,
+            command=self.restartGame
+        )
+        restart_btn.grid(row=0, column=5, padx=10)
         
         # Word search grid
         self.searchGrid = self.displayWordSearch()
@@ -294,7 +314,7 @@ class Application():
     def destroyGame(self):
         self.root.destroy()
 
-
+    
 
 
 Application()
