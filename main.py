@@ -231,8 +231,8 @@ class Application():
     def cross_found_word(self, word):
         for l in self.words_to_find_labels:
             if l['text'] == word:
-                strike_through_word = '\u0336'.join(word)+'\u0336'
-                l.configure(text=strike_through_word)
+                # strike_through_word = '\u0336'.join(word)+'\u0336'
+                l.configure(bg='green')
                 return
 
 
