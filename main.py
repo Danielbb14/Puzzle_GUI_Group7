@@ -189,7 +189,8 @@ class Application():
             heart.configure(fg='red' if i < self.remaining_lives else 'gray')
         
         if self.remaining_lives <= 0:
-            self.destroyGame()
+            # self.destroyGame()
+            self.show_game_result(self.words_frame, False)
 
 
     # Function that buttons call on when they are clicked. When this is clicked I assume we communciate with logic layer and then get an updated state.
@@ -201,6 +202,7 @@ class Application():
         self.current_word += (button['text'])  # Append letter to the current word
         print("clicked for curr word: {}".format(self.current_word))
         self.current_coords.append([row, col])
+        button.config(bg="orange", activebackground="orange", relief="solid", highlightbackground="orange")
 
         # Check if the current word matches any word in selectedWords
         if self.current_word in self.selectedWords:
@@ -216,17 +218,23 @@ class Application():
                 btn.config(bg="green", activebackground="green", relief="solid", highlightbackground="green")
             if self.found_count == len(self.selectedWords):
                 print("YOU WON!!!:-)")
-                self.destroyGame()
+                self.show_game_result(self.words_frame, True)
+                # self.destroyGame()
             self.resetSelection()
         # Check if the current_word is a valid prefix of any word
         elif not any(word.startswith(self.current_word) for word in self.selectedWords):
             print(f"Invalid word: {self.current_word}")
+            for coords in self.current_coords: # revert color back
+                print("clicked for curr coords: {}".format(coords))
+                btn = self.Buttons[coords[0], coords[1]]
+                btn.config(bg="white", activebackground="white", relief="solid", highlightbackground="black")
             self.resetSelection()  # Reset since no word starts with this prefix
             self.remaining_lives -= 1
             self.update_lives_display()
             if self.remaining_lives == 0:
                 print("YOU LOST:-(")
-                self.destroyGame()
+                self.show_game_result(self.words_frame, False)
+                # self.destroyGame()
 
     def cross_found_word(self, word):
         for l in self.words_to_find_labels:
@@ -241,13 +249,6 @@ class Application():
         self.current_word = ""  # Clear the word
         self.current_coords = []
 
-        # if button:
-        #    self.remaining_lives -= 1
-        #    self.found_count += 1
-        #    self.update_lives_display()
-        #    self.udpate_found_words_label()
-        #    button.config(bg="green")
-
     #Endless loop that displays timer       
     def update_timer(self):
         if self.time_left > 0:
@@ -257,9 +258,37 @@ class Application():
             self.time_left -= 1
             self.found_words
             self.root.after(1000, self.update_timer)
-        else:
-            messagebox.showinfo("Time's up!", "Game Over!")
-            self.destroyGame()
+        elif self.time_left == 0:
+            seconds = minutes = 0
+            self.timer_label.config(text=f"{minutes:02d}:{seconds:02d}")
+            self.show_game_result(self.words_frame, False)
+
+
+    def show_game_result(self, frame, won=True):
+        """
+        Displays a win/lose message in the middle of an existing frame.
+        
+        :param frame: The parent Tkinter frame where the message will be displayed.
+        :param won: Boolean indicating whether the player won (True) or lost (False).
+        """
+        # Clear any previous messages in the frame
+        for widget in frame.winfo_children():
+            widget.destroy()
+
+        self.time_left = 0
+
+        # Configure the message
+        message = "🎉 You Won!!! 🎉" if won else "❌ You Lost, Better Luck Next Time!"
+        text_color = "green" if won else "red"
+
+        # Create a label for the game result
+        result_label = Label(
+            frame, 
+            text=message, 
+            font=("Arial", 20, "bold"), 
+            fg=text_color
+        )
+        result_label.pack(expand=True)  # Center the label in the frame
 
 
     def destroyGame(self):
