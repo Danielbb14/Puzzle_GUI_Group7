@@ -6,10 +6,13 @@ class Application():
     def __init__(self):
         
         self.word2DArray = Array2D(10, 10)
-        self.word2DArray.populate()
-        self.selectedWords = ['CARROT', 'POTATO', 'FISH']
+        self.selectedWords = ['carrot', 'potato', 'fish']
+        self.word2DArray.populate(self.selectedWords)
         self.found_words = []
+        self.current_coords = []
+        self.current_word = ""
         self.total_words = len(self.selectedWords)
+        self.words_to_find_labels = []
         self.found_count = 0
         self.remaining_lives = 3
         self.time_left = 600
@@ -115,7 +118,6 @@ class Application():
 
 
         #Frame to hold the words to select
-        
         bordered_frame = Frame(
             self.words_frame,
             bg='white',
@@ -136,15 +138,18 @@ class Application():
         word_list_frame = Frame(bordered_frame, bg='white', pady=10)
         word_list_frame.pack()
 
+        # Show the words to be found
         for i, word in enumerate(self.selectedWords):
-            Label(
+            l = Label(
                 word_list_frame,
                 text=word,
                 font=('Arial', 12),
                 fg="black",
                 bg='white',
                 padx=10
-            ).grid(row=0, column=i)
+            )
+            l.grid(row=0, column=i)
+            self.words_to_find_labels.append(l)
         
         self.update_timer()
         self.root.mainloop()
@@ -158,23 +163,23 @@ class Application():
         for i in range(x):
             for j in range(y):
                 text = self.word2DArray[i, j]
-                but = but =but = Button(
+                but = Button(
                     self.WordSearchFrame, 
                     text=text, 
                     width=2, 
                     height=1,
-                    font=('Arial', 10),
+                    font=('Arial', 12),
                     bg='white',              # This will make it green
                     fg='black',
                     disabledforeground='black',  # This ensures text stays visible
                     border=0,
-                    command=lambda coords=(i, j): self.submitData(coords)
+                    command=lambda i=i, j=j: self.submitData((i,j))
                 )
                 but.grid(row=i, column=j, padx=1, pady=1)
                 self.Buttons[i, j] = but  # Store reference properly
 
         return self.WordSearchFrame
-    
+
 
     def udpate_found_words_label(self): #Refresh UI for found words
         self.found_words_label.configure(text=f"FOUND\n{self.found_count}/{self.total_words}")
@@ -185,7 +190,6 @@ class Application():
         
         if self.remaining_lives <= 0:
             self.destroyGame()
-    
 
 
     # Function that buttons call on when they are clicked. When this is clicked I assume we communciate with logic layer and then get an updated state.
@@ -194,6 +198,48 @@ class Application():
     def submitData(self, coords):
         row, col = coords
         button = self.Buttons[row, col]  # Get the button correctly
+        self.current_word += (button['text'])  # Append letter to the current word
+        print("clicked for curr word: {}".format(self.current_word))
+        self.current_coords.append([row, col])
+
+        # Check if the current word matches any word in selectedWords
+        if self.current_word in self.selectedWords:
+            print(f"Word found: {self.current_word}")
+            self.found_words.append(self.current_word)  # Store found word
+            print("updated found words: {}".format(self.found_words))
+            self.found_count += 1
+            self.udpate_found_words_label()
+            self.cross_found_word(self.current_word)
+            for coords in self.current_coords:
+                print("clicked for curr coords: {}".format(coords))
+                btn = self.Buttons[coords[0], coords[1]]
+                btn.config(bg="green", activebackground="green", relief="solid", highlightbackground="green")
+            if self.found_count == len(self.selectedWords):
+                print("YOU WON!!!:-)")
+                self.destroyGame()
+            self.resetSelection()
+        # Check if the current_word is a valid prefix of any word
+        elif not any(word.startswith(self.current_word) for word in self.selectedWords):
+            print(f"Invalid word: {self.current_word}")
+            self.resetSelection()  # Reset since no word starts with this prefix
+            self.remaining_lives -= 1
+            self.update_lives_display()
+            if self.remaining_lives == 0:
+                print("YOU LOST:-(")
+                self.destroyGame()
+
+    def cross_found_word(self, word):
+        for l in self.words_to_find_labels:
+            if l['text'] == word:
+                strike_through_word = '\u0336'.join(word)+'\u0336'
+                l.configure(text=strike_through_word)
+                return
+
+
+    def resetSelection(self):
+        """Reset the current word selection"""
+        self.current_word = ""  # Clear the word
+        self.current_coords = []
 
         # if button:
         #    self.remaining_lives -= 1
@@ -201,7 +247,6 @@ class Application():
         #    self.update_lives_display()
         #    self.udpate_found_words_label()
         #    button.config(bg="green")
-            
 
     #Endless loop that displays timer       
     def update_timer(self):
@@ -215,7 +260,8 @@ class Application():
         else:
             messagebox.showinfo("Time's up!", "Game Over!")
             self.destroyGame()
-    
+
+
     def destroyGame(self):
         self.root.destroy()
 

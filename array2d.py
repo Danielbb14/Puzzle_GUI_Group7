@@ -46,7 +46,7 @@ class Array2D:
             for j in range(y):
                 print(self.theRows[i][j], end=" ")
             print()
-    
+
     def place_word(self, word, direction,start_cord_x,start_cord_y):
         placements_x = [start_cord_x]
         placements_y = [start_cord_y]
@@ -75,13 +75,11 @@ class Array2D:
             self.theRows[x][y]= letter
         return True
 
-        
 
-
-    def populate(self):
+    def populate(self, selected_words):
         x=self.numrows()
         y=self.numcols()
-        words_to_add = ['morot', 'potatis', 'fisk']
+        words_to_add = selected_words
         # rand_row_col = [random.uniform(0,1) for _ in range(8)]
 
         for index in range(len(words_to_add)):
@@ -109,18 +107,8 @@ class Array2D:
             for j in range(y):
                 if self.theRows[i][j]==0:
                     self.theRows[i][j] = random.choice(string.ascii_uppercase)
-        
-
-                
-
-                    
 
 
-        
-                
-           
-
-    
     def SelectedTraversal(self,From,To):
         assert type(From)==tuple and type(To)==tuple,"Two subscripts required."
         lst=[]
