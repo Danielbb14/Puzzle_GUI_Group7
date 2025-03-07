@@ -21,7 +21,7 @@ Ensure you have Python installed on your system. You also need Tkinter, which is
    ```
 
 ## How to Play
-1. Launch the game by running `gui.py`.
+1. Launch the game by running `main.py`.
 2. A puzzle word instance will appear on the screen.
 
 
