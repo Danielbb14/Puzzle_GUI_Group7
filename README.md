@@ -1,13 +1,7 @@
 # Puzzle Word Game
 
 ## Overview
-Puzzle Word Game is a simple and interactive word puzzle game built using Python and Tkinter. The game challenges players to unscramble letters and form correct words.
-
-## Features
-- User-friendly graphical interface using Tkinter
-- Interactive word puzzle challenges
-- Real-time feedback on user input
-- Score tracking system
+A game that helps players learn Swedish vocabulary through an interactive word puzzle. Players find Swedish words hidden in a grid based on their English translations, making language learning fun and engaging.
 
 ## Requirements
 Ensure you have Python installed on your system. You also need Tkinter, which is included with standard Python installations.
