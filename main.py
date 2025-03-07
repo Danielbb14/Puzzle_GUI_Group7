@@ -164,14 +164,14 @@ class Application():
                     width=2, 
                     height=1,
                     font=('Arial', 10),
-                    bg='green',              # This will make it green
+                    bg='green',              
                     fg='black',
-                    disabledforeground='black',  # This ensures text stays visible
+                    disabledforeground='black', 
                     border=0,
                     command=lambda coords=(i, j): self.submitData(coords)
                 )
                 but.grid(row=i, column=j, padx=1, pady=1)
-                self.Buttons[i, j] = but  # Store reference properly
+                self.Buttons[i, j] = but  
 
         return self.WordSearchFrame
     
